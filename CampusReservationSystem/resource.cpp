@@ -1,5 +1,7 @@
 #include <iostream>
 #include "resource.h"
+#include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -45,15 +47,68 @@ void campusResource::setavailable(bool status)
     availability = status;
 }
 
-void campusResource::printResource()
-{
-    cout << "Resource ID: " << resourceID << endl;
-    cout << "Resource Name: " << resourceName << endl;
-    cout << "Resource Type: " << resourceType << endl;
-   if(availability==true){
-    cout << "Yes, This is available" << endl;
-   }
-   else{
-    cout << "We are sorry, This is not available" << endl;
-   }
+ void initializeResources(vector<campusResource>& resources) // we are creating a function here which doesnt return value.
+  {
+    ifstream inputFile("resources.txt"); // it opens the resource.txt file in our project
+ 
+    // checking weather the file is opened or not if not it shows the error.
+    if(!inputFile){ 
+        cout << "Error: Couldn't open resources." << endl;
+    }
+    // declearing variables to hold data.
+    int id;
+    string name;
+    string type;
+
+    // it will keep reading the file is vaild ID name and type
+    while (inputFile >> id >> name >> type){
+        // creating campus resource object and adding new resource object to vector
+        campusResource(id, name, type);
+        resources.push_back(campusResource(id, name, type));
+        
+    }
+    // closing inputfile
+    inputFile.close();
+
 }
+
+void displayResources(vector<campusResource>& resources) // we are creating a resources function here which doesnt return value.
+    {
+        // Printing heading
+        cout << "\n Campus Resources" << endl;
+
+        //we are going through each resource and displaying the resources.
+        for(campusResource& resource : resources){
+            cout << "Resource ID: " << resource.getID() << endl;
+            cout << "Resource Name: " << resource.getName() << endl;
+            cout << "Resource Type: " << resource.getType() << endl;
+            if(resource.available()){ // if available.
+                cout << "Yes, This is available" << endl;
+            }
+            else{
+                cout << "We are sorry, This is not available" << endl;
+            }
+        }
+
+    }
+
+    // creating a Availability function that display the availabilty of every resources
+    void availability(vector<campusResource>& resources)
+    {
+        // Printing heading
+        cout << "\n Campus Resources Availability" << endl;
+
+        //we are going through each resource and displaying the resources availibility.
+        for(campusResource& resource : resources){
+            cout << "Resource ID: " << resource.getID() << endl;
+            cout << "Resource Name: " << resource.getName() << endl;
+            cout << "Resource Type: " << resource.getType() << endl;
+            if(resource.available()){ // if available.
+                cout << "Yes, This is available" << endl;
+            }
+            else{
+                cout << "We are sorry, This is not available" << endl;
+            }
+        }
+
+    }

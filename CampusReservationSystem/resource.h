@@ -1,6 +1,7 @@
 #ifndef RESOURCE_HEADER
 #define RESOURCE_HEADER
 #include<string>
+#include<vector>
 using namespace std;
 
 class campusResource{
@@ -23,6 +24,15 @@ class campusResource{
 
 
 };
+
+// Reads resources from resources.txt
+void initializeResources(vector<campusResource>& resources);
+
+// Displays all resources
+void displayResources(vector<campusResource>& resources);
+
+// Displays availability of all resources
+void availability(vector<campusResource>& resources);
 #endif
 
 
