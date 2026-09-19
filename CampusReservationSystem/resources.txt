@@ -1,9 +1,10 @@
-1 Laptop_1 Device
-2 Laptop_2 Device
-3 Laptop_3 Device
+
 4 Calculator_1 Device
 5 Calculator_2 Device
 6 Calculator_3 Device
 7 Study_room_1 Room 
 8 Study_room_2 Room
 9 Group_study_room Hall
+1 Laptop_1 Device
+2 Laptop_2 Device
+3 Laptop_3 Device

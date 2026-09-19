@@ -24,16 +24,18 @@ int main(){
     do{
         cout << " Campus Resources Reservation System "<< endl; // header
         cout << endl; 
-        cout << " 1." << " View all resources " << endl; // options
-        cout << " 2. " << " View available resources " << endl;
-        cout << " 3. " << " Create Reservation " << endl;
+        cout << "1." << " View all resources " << endl; // options
+        cout << "2. " << " View available resources " << endl;
+        cout << "3. " << " Create Reservation " << endl;
         cout << "4. " << "Cancel Reservation " << endl;
         cout << "5. " <<  " View Active Reservations " << endl;
         cout << "6. " << " Search for reservation " << endl;
+        cout << "7. " << "Enter Resource ID " << endl;
+        cout << "8. " << "Sort Resources by ID. " << endl;
         cout << "0. " << " Exit " << endl;
 
         // prompting user to enter choice.
-        cout << " Enter number from 1-7 to make choice: " << endl;
+        cout << " Enter number from 0-6 to make choice: " << endl;
         cin >> choice;
 
         // using switch case to make a choice for user to select what they need
@@ -63,6 +65,22 @@ int main(){
         cout << " search for reservation";
         break;
 
+        case 7:
+        // prompting user to enter resource ID.
+        cout << "Enter Resource ID: ";
+        int id;
+        cin >> id;
+        // calling findResource function from resource.cpp
+        findResource(resources, id);
+        break;
+
+        case 8:
+        sortResources(resources);
+
+        cout<< "Sort resources by ID" << endl;
+        displayResources(resources);
+        break;
+
         case 0:
         cout << " Thank you for using our system. " << endl;
         break;
@@ -74,13 +92,5 @@ int main(){
     
     }while(choice !=0); // Loop will continue untill user enter 0.
 
-    
-
-    displayResources(resources); // calling the function to display all the resources.
-
-    // calling the function to display is it available or not.
-    availability(resources);
-
-    //
-
+return 0;
 }
