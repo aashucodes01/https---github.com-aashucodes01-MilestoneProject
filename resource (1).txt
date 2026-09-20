@@ -1,0 +1,5 @@
+R101|Study Room 101|Study Room|Available
+R102|Study Room 102|Study Room|Available
+R103|Study Room 103|Study Room|Unavailable
+R104|Study Room 104|Study Room|Available
+R105|Laptop 01|Laptop|Available
