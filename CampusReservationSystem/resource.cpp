@@ -63,7 +63,6 @@ void campusResource::setavailable(bool status)
     // it will keep reading the file is vaild ID name and type
     while (inputFile >> id >> name >> type){
         // creating campus resource object and adding new resource object to vector
-        campusResource(id, name, type);
         resources.push_back(campusResource(id, name, type));
         
     }

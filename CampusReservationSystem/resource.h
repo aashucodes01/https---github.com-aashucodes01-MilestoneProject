@@ -20,7 +20,7 @@ class campusResource{
     bool available();
 
     void setavailable(bool status);
-    void printResource();
+    
 
 
 };

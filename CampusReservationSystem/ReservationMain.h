@@ -3,43 +3,41 @@
 
 #include <vector>
 #include "reservation.h"
-#include "queue.h"
-#include "reservationLog.h"
+#include "waitingList.h"
+#include "cancellationHistory.h"
 #include "resource.h"
+#include"activeReservation.h"
 using namespace std;
 
 class ReservationMain{
     private:
-        vector<Reservation> reservations;
-        
-
-        campusResource campusResource;
-        waitList waitList;
-        ReservationLog reservationLog;
+        ActiveReservation activeReservation;
+        WaitingList waitList;
+        CancellationHistory cancellationHistory;
+        int nextReservationID;
 
     public:
-        ReservationMain(campusResource campRes, waitList list, ReservationLog log);
-
-
-        //loads reservations.txt
-        bool loadFile(const string filename);
+        ReservationMain();
 
         //Creates the reservation for user (FIFO order)
-        void createReservation(int studentID, const string studentName, const string resourceID, const string date);
+        void createReservation(int studentID, const string studentName, const int resourceID, const string date, vector<campusResource>& resources);
 
         //Cancels reservation by ID, removes from active reservation list
-        bool cancelReservation(int reservationID);
+        bool cancelReservation(int reservationID, vector<campusResource>& resources);
 
     
         //Restores most recent cancelled reservations
-        bool undoCancel();
+        bool undoCancel(vector<campusResource>& resources);
 
         //searches reservations by reservationID, stuID, student name, resourceID, or date
         void viewActiveReservations() const;
 
-        
+        // searching reservation.
+        void searchReservation(int reservationID);
+    
+        void viewWaitingList();
 
-}
+};
 
 
 
