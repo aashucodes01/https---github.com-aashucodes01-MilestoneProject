@@ -37,13 +37,14 @@ void availability(vector<campusResource>& resources);
 // it will find resources using its ID
 void findResource(vector<campusResource>& resources, int id);
 
+//this we did for final project searching requirment, we used linear search
 // it will shorts resources by Resource ID
 void sortResources(vector<campusResource>& resources);
 
 // It will merge sorted parts.
 void mergeResources(vector<campusResource>& resources, int left, int middle, int right);
 
-// here we perform merge sort
+// here we perform merge sort which divides the vector into smaller section
 void mergeSort(vector<campusResource>& resources, int left, int right);
 
 #endif

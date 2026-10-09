@@ -4,7 +4,7 @@
 #include <fstream>
 
 using namespace std;
-
+// declearing default constructor.
 campusResource::campusResource()
 {
     resourceID = 0;
@@ -12,7 +12,7 @@ campusResource::campusResource()
     resourceType = "";
     availability = false;
 }
-
+// constructor create a campus resource
 campusResource::campusResource(int id, string name, string type)
 {
     resourceID = id;
@@ -54,6 +54,7 @@ void campusResource::setavailable(bool status)
     // checking weather the file is opened or not if not it shows the error.
     if(!inputFile){ 
         cout << "Error: Couldn't open resources." << endl;
+        return; // stop loading resources
     }
     // declearing variables to hold data.
     int id;
@@ -81,6 +82,13 @@ void displayResources(vector<campusResource>& resources) // we are creating a re
             cout << "Resource ID: " << resource.getID() << endl;
             cout << "Resource Name: " << resource.getName() << endl;
             cout << "Resource Type: " << resource.getType() << endl;
+           // it will show available or not
+            if (resource.available()) {
+                cout << "Availability: Available" << endl;
+                 }
+                else {
+                 cout << "Availability: Not Available" << endl;
+                }
            cout << endl;
            cout << endl;
         }
@@ -111,7 +119,8 @@ void displayResources(vector<campusResource>& resources) // we are creating a re
         }
 
     }
-
+    //final project requires mearge sort and searching so here are the function for it
+    // the algorithm is linear search which checks each ID.
     // creating a findresources function that find resources using its ID
     // here we used linear search method.
     void findResource(vector<campusResource>& resources, int id){
@@ -151,6 +160,7 @@ void displayResources(vector<campusResource>& resources) // we are creating a re
             cout << "Resource " << id << " not found. Try other resources. "<< endl;
         }
     }
+
     // creating a sortResources function which sorts all resources by resource id.
     void sortResources(vector<campusResource>& resources)
     {
@@ -166,7 +176,7 @@ void displayResources(vector<campusResource>& resources) // we are creating a re
        // continue spliting
         if (left < right){
             //first it find mid point
-            int middle = (left+right)/2;
+            int middle = left + (left-right)/2;
             // sort left half then right half and merge sorts all together
             mergeSort(resources, left, middle);
             mergeSort(resources, middle +1, right);
