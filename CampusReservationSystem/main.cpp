@@ -2,6 +2,8 @@
 #include "resource.h" // It includes the campusResource class 
 #include <vector>
 #include <fstream>
+#include <limits> // for input validation
+
 #include "ReservationMain.h"
 
 using namespace std;
@@ -17,7 +19,7 @@ int main(){
     // creating a vector.
     vector<campusResource> resources;
 
-    ReservationMain reservationSystem;
+    ReservationMain reservationSystem; // reservation object
 
     // calling the function to initialize resources.
     initializeResources(resources);
@@ -39,12 +41,21 @@ int main(){
         cout << "8. " << "Sort Resources by ID. " << endl;
         cout << "9. " << "Restore Last cancelled Reservation."<< endl;
         cout << "10. "<< "View Waiting List" << endl;
+        cout << "11. " << "Generate System Reports" << endl;
         cout << "0. " << " Exit " << endl;
         
         // prompting user to enter choice.
-        cout << " Enter number from 0-10 to make choice: " << endl;
+        cout << " Enter number from 0-11 to make choice: " << endl;
         cin >> choice;
 
+        // check invalid input 
+        if(cin.fail()){
+            cin.clear();
+            cin.ignore(1000,'\n');
+            cout << "Invalid input. Enter numeric value:"<< endl;
+            choice = -1;
+            continue;
+        }
         // using switch case to make a choice for user to select what they need
 
     switch(choice){
@@ -84,6 +95,7 @@ int main(){
         }
 
         case 4:
+        {
         int reservationID;
         cout << "Enter Reservation ID: ";
         cin >> reservationID;
@@ -91,12 +103,12 @@ int main(){
         // calling cancel reservation
         reservationSystem.cancelReservation(reservationID, resources);
         break;
-
+        }
         case 5:
         // callig=ng view reservation function.
        reservationSystem.viewActiveReservations();
         break;
-
+        
         case 6:
         {
             // prompting reservation id to find user reservation
@@ -110,6 +122,7 @@ int main(){
         }
 
         case 7:
+        {
         // prompting user to enter resource ID.
         cout << "Enter Resource ID: ";
         int id;
@@ -117,6 +130,7 @@ int main(){
         // calling findResource function from resource.cpp
         findResource(resources, id);
         break;
+        }
 
         case 8:
         sortResources(resources);
@@ -138,6 +152,60 @@ int main(){
         case 0:
         cout << " Thank you for using our system. " << endl;
         break;
+
+        case 11:
+        {
+            // creating a variable 
+            int reportChoice;
+            if (cin.fail()) {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "Invalid input. Enter a number." << endl;
+                 break;
+}
+            cout << endl;
+            // display system report interface
+            cout << "SYSTEM REPORTS"<< endl;
+            cout << endl;
+            cout << "1. Active Reservations" << endl;
+            cout << "2. Resource Utilization" << endl;
+            cout << "3. Most Requested Resources" << endl;
+            cout << "4. Waiting List Statistics" << endl;
+
+        // prompt to enter choice for user
+        cout << "Enter report choice: " << endl;
+        cin >> reportChoice;
+
+        // using switch case to go select choice
+        switch(reportChoice){
+            case 1:
+            reservationSystem.viewActiveReservations();
+            break;
+
+            case 2:
+            cout << "Resource Utilization Report" << endl;
+            // commenting this line for not later after eric done this we will update here 
+            // reservationSystem.showResourceUtilization(resources);
+            break;
+
+            case 3:
+            cout << "Most Requested Resources Report" << endl;
+            // reservationSystem.showMostRequestedResources(resources);
+            break;
+
+            case 4:
+            cout <<"Wating List Statistics Report" << endl;
+            // reservationSystem.showWaitingListStatistics();
+            break;
+
+            default:
+            cout << "Invalid report choice" << endl;
+
+
+        }
+        break;
+
+        }
 
         default:
         cout << " Invalid Choice. Please try again." << endl;
