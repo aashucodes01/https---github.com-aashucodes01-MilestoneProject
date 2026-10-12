@@ -47,6 +47,12 @@ void mergeResources(vector<campusResource>& resources, int left, int middle, int
 // here we perform merge sort which divides the vector into smaller section
 void mergeSort(vector<campusResource>& resources, int left, int right);
 
+// here this function shows how many resources are resereved nad available
+void showResourceUtilization(vector<campusResource>& resources);
+
+// Display resources ordered by number of request
+void showMostRequestedRequestedResources(vector<campusResource>& resources, const vector<int>& requestCounts);
+
 #endif
 
 

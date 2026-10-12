@@ -74,6 +74,8 @@ int main(){
             string studentName;
             int resourceID;
             string date;
+            string startTime;
+            string endTime;
 
             cout << "Enter student ID: " ;
             cin >> studentID;
@@ -88,8 +90,14 @@ int main(){
             cout << "Enter Reservation date: ";
             cin >> date;
 
+            cout << "Enter Start Time (HH:MM): ";
+            cin >> startTime;
+
+            cout << "Enter End Time (HH:MM): ";
+            cin >> endTime;
+
             // calling create reservation function here.
-            reservationSystem.createReservation(studentID, studentName, resourceID, date, resources);
+            reservationSystem.createReservation(studentID, studentName, resourceID, date, startTime, endTime, resources);
             break;
 
         }
@@ -184,18 +192,19 @@ int main(){
 
             case 2:
             cout << "Resource Utilization Report" << endl;
-            // commenting this line for not later after eric done this we will update here 
-            // reservationSystem.showResourceUtilization(resources);
+          // callingn show resource function 
+           showResourceUtilization(resources);
             break;
 
             case 3:
             cout << "Most Requested Resources Report" << endl;
-            // reservationSystem.showMostRequestedResources(resources);
+            // calling the function 
+             reservationSystem.showMostRequestedResources(resources);
             break;
 
             case 4:
             cout <<"Wating List Statistics Report" << endl;
-            // reservationSystem.showWaitingListStatistics();
+            reservationSystem.showWaitingListStatistics(resources);
             break;
 
             default:

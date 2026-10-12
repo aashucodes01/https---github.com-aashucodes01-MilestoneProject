@@ -176,7 +176,7 @@ void displayResources(vector<campusResource>& resources) // we are creating a re
        // continue spliting
         if (left < right){
             //first it find mid point
-            int middle = left + (left-right)/2;
+            int middle = left + (right-left)/2;
             // sort left half then right half and merge sorts all together
             mergeSort(resources, left, middle);
             mergeSort(resources, middle +1, right);
@@ -226,4 +226,35 @@ void displayResources(vector<campusResource>& resources) // we are creating a re
 
         }
 
-    } 
+    }
+    
+    // THis function shows resource itilization statistics
+    void showResourceUtilization(vector<campusResource>& resources){
+        int total = resources.size();
+        int reserved = 0;
+        int availableCount =0;
+
+        // check each resource
+        for(campusResource& resource : resources){
+            if(resource.available()){
+                availableCount++;
+
+            }
+            else{
+                reserved++;
+            }
+        }
+        // calculating % 
+        double percentage = 0;
+        if (total >0){
+            percentage= (double)reserved/total *100;
+
+        }
+        // display report
+        cout << endl;
+        cout << "Resource Utilization Report" << endl;
+        cout << "Total Resource: " << total << endl;
+        cout << "Reserved Resources: " << reserved << endl;
+        cout << "Available Resources: " << availableCount << endl;
+        cout << "Utilization: " << percentage << "%"<< endl;
+    }
