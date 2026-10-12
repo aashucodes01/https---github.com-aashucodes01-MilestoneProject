@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <algorithm>
 
+using namespace std;
 // constructor..
 ReservationMain::ReservationMain()
 {
@@ -11,7 +12,7 @@ ReservationMain::ReservationMain()
 }
 
 // function to create reservation.
-void ReservationMain::createReservation(const int studentID, const string studentName, const int resourceID, const string date, vector<campusResource>& resources){
+void ReservationMain::createReservation(const int studentID, const string studentName, const int resourceID, const string date, const string startTime, const string endTime, vector<campusResource>& resources){
    
 // will check resource id exist or not
     bool resourceFound = false;
@@ -21,6 +22,9 @@ void ReservationMain::createReservation(const int studentID, const string studen
         // it will check resoure ID
        if(resources[i].getID() == resourceID){
         resourceFound = true;
+
+        //cout the requests
+        requestedResourceIDs.push_back(resourceID);
        
        // checking resources
        if(resources[i].available())
@@ -33,7 +37,7 @@ void ReservationMain::createReservation(const int studentID, const string studen
         cout << "Student will be added to the list." << endl;
 
         // adding students 
-        waitList.newStudent(studentID, resourceID, studentName, date);
+        waitList.newStudent(studentID, resourceID, studentName, date, startTime, endTime);
         return;
 
     }
@@ -53,7 +57,7 @@ void ReservationMain::createReservation(const int studentID, const string studen
     // if there is already reservation then,
     nextReservationID++;
 
-    Reservation newReservation(reservationID, studentID, studentName, resourceID, date);
+    Reservation newReservation(reservationID, studentID, studentName, resourceID, date, startTime, endTime);
     activeReservation.addReservation(newReservation);
 
     cout << "Reservation created successfully." << endl;
@@ -97,30 +101,72 @@ bool ReservationMain::cancelReservation(int reservationID, vector<campusResource
     activeReservation.removeReservation(reservationID);
     cout << "Reservation cancelled successfully." << endl;
 
-    return true;
+    // this is for check student is waiting for this resource or not
+int waitingStudentID;
+string waitingStudentName;
+string waitingDate;
+string waitingStartTime;
+string waitingEndTime;
+
+
+if(waitList.countWaiting(cancelled.getItemID())>0){
+    // remove the first student waiting
+    bool foundWaiting = waitList.removeFirst(cancelled.getItemID(), waitingStudentID, waitingStudentName, waitingDate, waitingStartTime, waitingEndTime);
+    if (foundWaiting){
+        // create a new reservation 
+        int newID= nextReservationID;
+        nextReservationID++;
+        
+        Reservation newReservation(newID, waitingStudentID,waitingStudentName,cancelled.getItemID(),waitingDate, waitingStartTime, waitingEndTime);
+        // add reservation to active link list
+        activeReservation.addReservation(newReservation);
+
+        // make resource unavailable again
+        for(int i = 0; i< resources.size(); i++ ){
+            if(resources[i].getID()==cancelled.getItemID()){
+                resources[i].setavailable(false);
+                break;
+            }
+        }
+        cout << "Resource assigned to next student." << endl;
+        cout << "New ReservationID: "<< newID << endl;
+
+       
+    }
+    
+}
+return true;
 
 }
 
-bool ReservationMain::undoCancel(vector<campusResource>& resources){
-    // Check if cancellation history has something to restore
-    if(cancellationHistory.canUndo())
-    {
-        // Get most recently cancelled reservation
-        Reservation restored =
-            cancellationHistory.undoCancel();
 
+
+bool ReservationMain::undoCancel(vector<campusResource>& resources){
+    //check the last cancelled reservation
+    Reservation restored;
+
+    if (!cancellationHistory.peakCancel(restored)){
+       cout << "Nothing to restore." << endl;
+        return false;
+    }
 
         // Find the resource
         for(int i = 0; i < resources.size(); i++)
         {
             if(resources[i].getID() == restored.getItemID())
             {
-                // Resource unavailable again
-                resources[i].setavailable(false);
+              // this is for if resource already reserve do not restore it
+              if(!resources[i].available()){
+                cout << "Sorry, It cant undo, Resource is already reserved"<< endl;
+                return false;
 
-                break;
             }
-        }
+            // Removing cancellation from stack
+            cancellationHistory.undoCancel();
+            // Reserve resource again
+            resources[i].setavailable(false);
+
+        // Resore the reservation.
         activeReservation.addReservation(restored);
 
         cout << "Reservation restored successfully." << endl;
@@ -131,12 +177,14 @@ bool ReservationMain::undoCancel(vector<campusResource>& resources){
 
 
         return true;
+            }
     }
     cout << "There is nothing to restore. Try again." << endl;
 
     return false;
 }
 
+// LINKED LIST to display all active reservation stored in the linked list.
 void ReservationMain::viewActiveReservations() const{
 cout << "\nActive Reservations:" << endl;
     // Table headings
@@ -146,12 +194,15 @@ cout << "\nActive Reservations:" << endl;
          << setw(22) << "StudentName"
          << setw(15) << "ResourceID"
          << setw(15) << "Date"
+         << setw(12) << "Start Time"
+         << setw(12) << "End Time" 
          << endl;
 
     // Display reservations from linked list
     activeReservation.displayReservations();
     
 }
+// Search the active reservation linked list
 void ReservationMain::searchReservation(int reservationID){
     Reservation* found =
         activeReservation.findReservation(reservationID);
@@ -164,8 +215,82 @@ void ReservationMain::searchReservation(int reservationID){
 
         return;
     }
+    else {
+        cout << "Reservation not found." << endl;
+    }
 }
 void ReservationMain::viewWaitingList(){
     waitList.displayWaitingList();
+}
+
+  // Display resources based on how many times they were requested.
+void ReservationMain:: showMostRequestedResources(vector<campusResource>& resources)
+{
+        vector<int> resourceIDs;
+        vector<int> counts;
+
+        // count requests for each resource
+        for(campusResource& resource : resources){
+            int count =0;
+            for(int requestedID : requestedResourceIDs){
+            if(requestedID == resource.getID()){
+                count++;
+                
+            }
+        }
+        resourceIDs.push_back(resource.getID());
+        counts.push_back(count);
+
+        }
+        // sort the resources
+        for(int i = 0; i <(int)counts.size(); i++){
+            for(int j = i +1; j<(int)counts.size(); j++){
+                if(counts[j] > counts[i]){
+                    // swapping
+                    int tempCount = counts[i];
+                    counts[i] = counts[j];
+                    counts[j] = tempCount;
+
+                // Swap the resource IDs
+                int tempID = resourceIDs[i];
+                resourceIDs[i] = resourceIDs[j];
+                resourceIDs[j] = tempID;
+
+                }
+            }
+        }
+        // Display the report 
+        cout << endl;
+        cout << "Most Requested Resources Report" << endl;
+        cout << " Resource ID \t Total Requests" << endl;
+
+        for (int i = 0; i < (int)resourceIDs.size(); i++)
+         {
+        cout << resourceIDs[i] << "\t\t" << counts[i] << endl;
+         }
+}
+
+// function for display the waiting list stastics
+void ReservationMain:: showWaitingListStatistics(vector<campusResource>& resources){
+    int totalWaiting = 0;
+    cout << " Waiting List Statistics Report" << endl;
+
+    // checking wach resource
+    for(campusResource& resource: resources){
+        // count students
+        int count = waitList.countWaiting(resource.getID());
+
+        cout << "ResourceID: " << resource.getID()<< endl;
+        cout << "Resource Name: " << resource.getName()<< endl;
+        cout << "Waiting Students: " << count << endl;
+        cout << endl;
+
+        // add total number of wait list
+        totalWaiting += count;
+
+    }
+    cout << endl; 
+    cout << "Total Students Waiting: " << totalWaiting << endl;
+
 }
 

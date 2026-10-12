@@ -126,3 +126,22 @@ Reservation* ActiveReservation::findReservation(int reservationID)
     }
     return nullptr;
 }
+// function for time overlap
+bool ActiveReservation :: hasTimeConflict(int resourceID, const string& date, const string& startTime, const string& endTime) const{
+    reservationNode* current =head;
+    while(current != nullptr){
+        if (current->reservation.getItemID() == resourceID &&
+        current->reservation.getDate() == date)
+    {
+        // Check if reservation times overlap
+        if (startTime < current->reservation.getEndTime() &&
+            endTime > current->reservation.getStartTime())
+        {
+            return true; // Time conflict found
+        }
+    }
+    current = current ->next;
+    }
+    return false; // time conflict not found
+}
+

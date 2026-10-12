@@ -32,6 +32,9 @@ class ActiveReservation{
     bool removeReservation(int reservationID);
 
     Reservation* findReservation(int reservationID);
+
+    // Check whether a resource is reserved during a requested time.
+bool hasTimeConflict(int resourceID, const string& date, const string& startTime, const string& endTime) const;
     
     // Display all active reservations
     void displayReservations() const;

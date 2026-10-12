@@ -1,6 +1,6 @@
 #Campus Resource Reservation System
 ## project description
-This is a Campus Resource Reservation system developed using C++ programming language. In this system students are allowed to view available resources, create reservation, cancel, search, and restore. Student also allowed to be on waiting list.
+This is a Campus Resource Reservation system developed using C++ programming language. In this system students are allowed to view available resources, create reservation, cancel, search, and restore. Student also allowed to be on waiting list. 
 
 ## features
  Load campus resources from a text file
@@ -15,8 +15,14 @@ This is a Campus Resource Reservation system developed using C++ programming lan
  Add students to a waiting list
  Display the waiting list
  Restore the most recently cancelled reservation
+ Display cancellation history
+ Generate active reservation report
+ generate resource utilization report
+ Generate most requested resource reports.
+ Generate waiting-list statistics.
 
  ## Data structure
+ linear search: works by checking each element of the collection one by one from the beginning until a match is found   
  vector: used to store campus resources.
  link List: used to store active reservation.
  Queue: used to be on waitlist
@@ -36,3 +42,6 @@ This is a Campus Resource Reservation system developed using C++ programming lan
  AASHUTOSH
  BISHAL
  ERIC
+
+ # Testing
+ The team tested the program's main features, including resource management, reservation creation, cancellation, waiting lists, searching, sorting, and reporting.

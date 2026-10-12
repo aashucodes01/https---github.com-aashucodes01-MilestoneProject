@@ -16,11 +16,14 @@ class ReservationMain{
         CancellationHistory cancellationHistory;
         int nextReservationID;
 
+         // stores the resource ID for each student request
+        vector<int> requestedResourceIDs;
+
     public:
         ReservationMain();
 
         //Creates the reservation for user (FIFO order)
-        void createReservation(int studentID, const string studentName, const int resourceID, const string date, vector<campusResource>& resources);
+        void createReservation(int studentID, const string studentName, const int resourceID, const string date, const string startTime, const string endTime, vector<campusResource>& resources);
 
         //Cancels reservation by ID, removes from active reservation list
         bool cancelReservation(int reservationID, vector<campusResource>& resources);
@@ -36,6 +39,12 @@ class ReservationMain{
         void searchReservation(int reservationID);
     
         void viewWaitingList();
+
+          // Display resources based on how many times they were requested.
+        void showMostRequestedResources(vector<campusResource>& resources);
+
+        // Display how many students are waiting for each resource.
+        void showWaitingListStatistics(vector<campusResource>& resources);
 
 };
 
